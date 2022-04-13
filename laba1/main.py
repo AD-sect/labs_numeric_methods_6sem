@@ -57,8 +57,8 @@ def method_2_ord(left_border, right_border,prev, curr, x, h, t, t_curr):
     next[0] = (gamma1 + (alpha[0]/(2*h))*(-4*next[1] + next[2])) * ((2*h) / (-3*alpha[0] + 2*h*beta[0]))
     next[-1] = (gamma2 + (alpha[1]/(2*h))*(-next[-3] + 4*next[-2] )) * ((2*h) / (3*alpha[1] + 2*h*beta[1]))
 
-    return next
 
+    return next
 
 def graphic1():
     left_border = 0
@@ -114,6 +114,64 @@ def graphic1():
     plt.plot(x, abs(u0(x, t*2) - method_2_ord(left_border, right_border, prev, curr, x, h, t, t * 2)), color='r', label="Ошибка для одного слоя")
     plt.legend()
 
+
+def graphic_error():
+    left_border = 0
+    right_border = 1
+
+    n = 20
+    a = np.sqrt(0.5)
+    x, h = np.linspace(left_border, right_border, n, retstep=True)
+    # print(h)
+    t_min = 0
+    t_max = 2
+
+    t = h * 0.5 / a
+
+    curr = np.zeros(len(x))
+    prev = np.zeros(len(x))
+
+    prev = fi1(x)
+    curr = fi2(x) * t + fi1(x)
+    next = np.zeros(len(x))
+
+    time = np.linspace(t_min, t_max,int((t_max - t_min)//t))
+
+    for i in range(2, len(time)+1):
+        next = method_1_ord(left_border, right_border, prev, curr, x, h, t, i*t)
+        prev = curr
+        curr = next
+        print(i)
+    print(53*t)
+
+    print("len ", len(time))
+
+    print(len(time)*t)
+
+    plt.subplot(1, 2, 1)
+    plt.title("Метод первого порядка точности")
+    plt.xlabel("x")
+    plt.ylabel("|Δu|")
+    plt.grid()
+    plt.plot(x, abs(u0(x, len(time)*t) - next), color='r',
+             label="Ошибка при t ~ 2")
+    plt.legend()
+
+    prev = fi1(x)
+    curr = fi2(x) * t + fi1(x) + ((t ** 2) / 2) * (a * a * (1 / 4) * np.exp(x) + func(x, 0))
+    for i in range(2, len(time)+1):
+        next = method_2_ord(left_border, right_border, prev, curr, x, h, t, i*t)
+        prev = curr
+        curr = next
+
+    plt.subplot(1, 2, 2)
+    plt.title("Метод второго порядка точности")
+    plt.xlabel("x")
+    plt.ylabel("|Δu|")
+    plt.grid()
+    plt.plot(x, abs(u0(x, len(time)*t) - next), color='r',
+             label="Ошибка при t ~ 2")
+    plt.legend()
     plt.show()
 
 def animation(ord):
@@ -179,8 +237,9 @@ def animation(ord):
     anim.save('ord2.gif', writer='imagemagick')
 
 if __name__ == '__main__':
-     graphic1()
-     animation(2)
+     # graphic1()
+     # animation(2)
+     graphic_error()
 
 
 #

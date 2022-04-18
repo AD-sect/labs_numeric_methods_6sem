@@ -32,7 +32,7 @@ def gamma(t):
     # gamma1 = (1/4)*np.exp(t)
     # gamma2 = (1/2)*np.exp(1+t)
 
-    gamma1 =  np.heaviside(np.pi-t, 1) * (np.sin(np.pi*t))**2
+    gamma1 = np.heaviside(np.pi/2 - t, 1) * (np.sin(np.pi*t))**2
     gamma2 = 0
 
     return gamma1, gamma2
@@ -247,13 +247,13 @@ def animation(ord):
         return line1, 
 
     anim = FuncAnimation(fig, animate, init_func=init,
-                         frames= int((t_max - t_min) // t), interval=20, blit=True)
+                         frames= 2*int((t_max - t_min) // t), interval=30, blit=True)
 
-    anim.save('ллл.gif', writer='imagemagick')
+    anim.save('dop2.gif', writer='imagemagick')
 
 if __name__ == '__main__':
      # graphic1()
-     animation(1)
+     animation(2)
      # graphic_error()
 
 

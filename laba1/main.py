@@ -3,23 +3,38 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
 
+# Струна, правый конец свободен, а левый смещают по закону (sin(pi*t))^2 * heaviside(pi - t).
+# По сути левый конец дергают один раз. Показать отражение волны от свободного (правого) конца струны.
+
+
 def fi1(x):
-    return (1/4)*np.exp(x)
+    # return (1/4)*np.exp(x)
+    return 0
 
 def fi2(x):
-    return (1/4)*np.exp(x)
+    # return (1/4)*np.exp(x)
+    return 0
 
 def func(x, t):
-    return (1/8)*np.exp(x+t)
+    # return (1/8)*np.exp(x+t)
+    return 0
 
 def coefficients():
-    alpha = [-1, -1]
-    beta = [2, 3]
+    # alpha = [-1, -1]
+    # beta = [2, 3]
+
+    alpha = [0, 1]
+    beta = [1, 0]
+
     return alpha, beta
 
 def gamma(t):
-    gamma1 = (1/4)*np.exp(t)
-    gamma2 = (1/2)*np.exp(1+t)
+    # gamma1 = (1/4)*np.exp(t)
+    # gamma2 = (1/2)*np.exp(1+t)
+
+    gamma1 = (np.sin(np.pi * t))**2 * np.heaviside(t, np.pi - t)
+    gamma2 = 0
+
     return gamma1, gamma2
 
 def u0(x, t):
@@ -195,7 +210,8 @@ def animation(ord):
         u[1] = fi2(x_mass) * t + fi1(x_mass)
         u[2] = method_1_ord(left_border, right_border, u[0], u[1], x_mass,  h, t, t_curr)
     if(ord == 2):
-        u[1] = fi2(x_mass) * t + fi1(x_mass) + ((t**2)/2)*(a*a*(1/4)*np.exp(x_mass) + func(x_mass, 0))
+        #если используем первноначальную задачу, пишем (1/4)*np.exp(x_mass)
+        u[1] = fi2(x_mass) * t + fi1(x_mass) + ((t**2)/2)*(a*a*0 + func(x_mass, 0))
         u[2] = method_2_ord(left_border, right_border, u[0], u[1], x_mass, h, t, t_curr)
 
     fig = plt.figure()
@@ -205,7 +221,7 @@ def animation(ord):
 
     def init():
         line1.set_data([], [])
-        line2.set_data([], [])
+        # line2.set_data([], [])
         return line1, line2,
 
     def animate(i):
@@ -213,7 +229,7 @@ def animation(ord):
 
         if i in [0, 1, 2]:
             y1 = u[i]
-            y2 = u0(x, i * t)
+            # y2 = u0(x, i * t)
         else:
             time = i * t
             u[0] = u[1]
@@ -223,23 +239,23 @@ def animation(ord):
             if (ord == 2):
                 u[2] = method_2_ord(left_border, right_border, u[0], u[1], x, h, t, time)
             y1 = u[2]
-            y2 = u0(x, time)
+            # y2 = u0(x, time)
 
         line1.set_data(x, y1)
-        line2.set_data(x, y2)
+        # line2.set_data(x, y2)
         line1.set_color("green")
-        line2.set_color("red")
-        return line1, line2,
+        # line2.set_color("red")
+        return line1, 
 
     anim = FuncAnimation(fig, animate, init_func=init,
                          frames=int((t_max - t_min) // t), interval=20, blit=True)
 
-    anim.save('ord2.gif', writer='imagemagick')
+    anim.save('special2.gif', writer='imagemagick')
 
 if __name__ == '__main__':
      # graphic1()
-     # animation(2)
-     graphic_error()
+     animation(2)
+     # graphic_error()
 
 
 #

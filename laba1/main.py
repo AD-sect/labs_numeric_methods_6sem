@@ -42,8 +42,8 @@ def u0(x, t):
 
 def method_1_ord(left_border, right_border,prev, curr, x,  h, t, t_curr):
     alpha, beta = coefficients()
-    a = np.sqrt(0.5)
-
+    # a = np.sqrt(0.5)
+    a = 1
     next = np.zeros(len(x))
 
     for i in range(1, len(x) - 1):
@@ -60,8 +60,8 @@ def method_1_ord(left_border, right_border,prev, curr, x,  h, t, t_curr):
 
 def method_2_ord(left_border, right_border,prev, curr, x, h, t, t_curr):
     alpha, beta = coefficients()
-    a = np.sqrt(0.5)
-
+    # a = np.sqrt(0.5)
+    a = 1
     next = np.zeros(len(x))
 
     for i in range(1, len(x) - 1):
@@ -250,11 +250,11 @@ def animation(ord):
     anim = FuncAnimation(fig, animate, init_func=init,
                          frames=int((t_max - t_min) // t), interval=20, blit=True)
 
-    anim.save('special2.gif', writer='imagemagick')
+    anim.save('special1.gif', writer='imagemagick')
 
 if __name__ == '__main__':
      # graphic1()
-     animation(2)
+     animation(1)
      # graphic_error()
 
 

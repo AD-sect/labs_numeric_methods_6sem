@@ -32,7 +32,7 @@ def gamma(t):
     # gamma1 = (1/4)*np.exp(t)
     # gamma2 = (1/2)*np.exp(1+t)
 
-    gamma1 = (np.sin(np.pi * t))**2 * np.heaviside(t, np.pi - t)
+    gamma1 =  np.heaviside(np.pi-t, 1) * (np.sin(np.pi*t))**2
     gamma2 = 0
 
     return gamma1, gamma2
@@ -51,11 +51,11 @@ def method_1_ord(left_border, right_border,prev, curr, x,  h, t, t_curr):
                   + t*t*func(x[i], t_curr - t) + 2*curr[i] - prev[i]
 
     gamma1, gamma2 = gamma(t_curr)
-    # next[0] = (gamma1 - next[1] * (alpha[0]/h)) * (h / (beta[0] * h - alpha[0]))
-    # next[-1] = (gamma2 + next[-2] * (alpha[1]/h)) * (h / (beta[1] * h + alpha[1]))
+    next[0] = (gamma1 - next[1] * (alpha[0]/h)) * (h / (beta[0] * h - alpha[0]))
+    next[-1] = (gamma2 + next[-2] * (alpha[1]/h)) * (h / (beta[1] * h + alpha[1]))
 
-    next[0] = (gamma1 - beta[0] * next[1] / h) / (alpha[0] - beta[0] / h)
-    next[-1] = (gamma2 + beta[1] * next[-2] / h) / (alpha[1] + beta[1] / h)
+    # next[0] = (gamma1 - beta[0] * next[1] / h) / (alpha[0] - beta[0] / h)
+    # next[-1] = (gamma2 + beta[1] * next[-2] / h) / (alpha[1] + beta[1] / h)
     return next
 
 def method_2_ord(left_border, right_border,prev, curr, x, h, t, t_curr):
@@ -71,7 +71,6 @@ def method_2_ord(left_border, right_border,prev, curr, x, h, t, t_curr):
     gamma1, gamma2 = gamma(t_curr)
     next[0] = (gamma1 + (alpha[0]/(2*h))*(-4*next[1] + next[2])) * ((2*h) / (-3*alpha[0] + 2*h*beta[0]))
     next[-1] = (gamma2 + (alpha[1]/(2*h))*(-next[-3] + 4*next[-2] )) * ((2*h) / (3*alpha[1] + 2*h*beta[1]))
-
 
     return next
 
@@ -192,7 +191,7 @@ def graphic_error():
 def animation(ord):
 
     left_border = 0
-    right_border = 1
+    right_border = 1.5
     t_min = 0
     t_max = 2
 
@@ -200,7 +199,8 @@ def animation(ord):
     x_mass, h = np.linspace(left_border, right_border, n, retstep=True)
 
     C = 0.5
-    a = np.sqrt(0.5)
+    # a = np.sqrt(0.5)
+    a = 1
     t = C * h / a
     t_curr = t * 2
     u = np.zeros((3, n))
@@ -226,7 +226,6 @@ def animation(ord):
 
     def animate(i):
         x = x_mass
-
         if i in [0, 1, 2]:
             y1 = u[i]
             # y2 = u0(x, i * t)
@@ -248,9 +247,9 @@ def animation(ord):
         return line1, 
 
     anim = FuncAnimation(fig, animate, init_func=init,
-                         frames=int((t_max - t_min) // t), interval=20, blit=True)
+                         frames= int((t_max - t_min) // t), interval=20, blit=True)
 
-    anim.save('special1.gif', writer='imagemagick')
+    anim.save('ллл.gif', writer='imagemagick')
 
 if __name__ == '__main__':
      # graphic1()

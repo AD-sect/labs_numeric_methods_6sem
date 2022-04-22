@@ -32,7 +32,7 @@ def gamma(t):
     # gamma1 = (1/4)*np.exp(t)
     # gamma2 = (1/2)*np.exp(1+t)
 
-    gamma1 = np.heaviside(np.pi/2 - t, 1) * (np.sin(np.pi*t))**2
+    gamma1 = np.heaviside(np.pi/4 - t, 1) * (np.sin(np.pi*t))**2
     gamma2 = 0
 
     return gamma1, gamma2
@@ -156,7 +156,7 @@ def graphic_error():
         prev = curr
         curr = next
         print(i)
-    print(53*t)
+    # print(53*t)
 
     print("len ", len(time))
 
@@ -187,6 +187,8 @@ def graphic_error():
              label="Ошибка при t ~ 2")
     plt.legend()
     plt.show()
+    
+    
 
 def animation(ord):
 

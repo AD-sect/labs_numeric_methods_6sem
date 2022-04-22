@@ -174,7 +174,7 @@ def animation():
 
 def main():
     graphic()
-    animation()
+    # animation()
 
 if __name__ == '__main__':
     main()

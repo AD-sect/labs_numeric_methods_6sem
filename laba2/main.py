@@ -3,19 +3,24 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
 def func(x, t):
-    return -2 * (x * np.tanh(x * t) + t**2 * (2 * np.tanh(x * t)**2 - 1)) / np.cosh(x * t)
-
+    # return -2 * (x * np.tanh(x * t) + t**2 * (2 * np.tanh(x * t)**2 - 1)) / np.cosh(x * t)
+    return 0
 def u0(x, t):
-    return 2 / np.cosh(x * t) - np.exp(x + t - 1) / 4
+    # return 2 / np.cosh(x * t) - np.exp(x + t - 1) / 4
+    return 0
 
 def gamma_r(t):
-    return np.exp(t) / 4 + 2 * (1 + 2 * t * np.tanh(t)) / np.cosh(t)
-
+    # return np.exp(t) / 4 + 2 * (1 + 2 * t * np.tanh(t)) / np.cosh(t)
+    return 0
 def gamma_l(t):
-    return 2 - np.exp(t - 1) / 4
-
-def fi(x):
-    return 2 - np.exp(x - 1) / 4
+    # return 2 - np.exp(t - 1) / 4
+    return 0
+def fi(x, left_border, right_border):
+    # return 2 - np.exp(x - 1) / 4
+    if(x <= ((right_border-left_border)/2)):
+        return 10
+    else:
+        return 0
 
 def coefficients():
     alpha = [0, -2]
@@ -119,6 +124,52 @@ def graphic():
 
     plt.show()
 
+def anim():
+
+    left_border = 0
+    right_border = 1
+    t_min = 0
+    t_max = 2
+
+    n = 20
+    x_arr = np.linspace(left_border, right_border, n + 1)
+    h = (right_border - left_border) / n
+
+    a = 1
+    tau = 0.1 * h
+    t_curr = tau * 2
+    u = np.zeros((2, n + 1))
+
+    for i in range(len(x_arr)):
+        u[0][i] = fi(x_arr[i], left_border, right_border)
+
+    u[1] = function(u[0], tau, 0.5, 1, x_arr, h)
+
+    fig = plt.figure()
+    ax = plt.axes(xlim=(left_border, right_border), ylim=(-3, 5))
+    line1, = ax.plot([], [], lw=3)
+
+    def init():
+        line1.set_data([], [])
+        return line1,
+
+    def animate(i):
+        x = x_arr
+        if i in [0, 1]:
+            y1 = u[i]
+        else:
+            u[0] = u[1]
+            u[1] = function(u[0], tau, 0.5, i, x_arr, h)
+            y1 = u[1]
+        line1.set_data(x, y1)
+        line1.set_color("green")
+        return line1,
+
+    anim = FuncAnimation(fig, animate, init_func=init,
+                         frames= int((t_max - t_min) // tau), interval=50, blit=True)
+
+    anim.save('dop.gif', writer='imagemagick')
+
 
 def animation():
 
@@ -136,7 +187,9 @@ def animation():
     t_curr = tau * 2
     u = np.zeros((2, n + 1))
 
-    u[0] = fi(x_arr)
+
+
+    u[0][i] = fi(x_arr)
     u[1] = function(u[0], tau, 0.5, 1, x_arr, h)
 
     fig = plt.figure()
@@ -173,9 +226,10 @@ def animation():
     anim.save('animation.gif', writer='imagemagick')
 
 def main():
-    graphic()
+    # graphic()
     # animation()
-
+    anim()
+#
 if __name__ == '__main__':
     main()
 

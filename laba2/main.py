@@ -23,8 +23,8 @@ def fi(x, left_border, right_border):
         return 0
 
 def coefficients():
-    alpha = [0, -2]
-    beta = [1, 1]
+    alpha = [1, 1]
+    beta = [0, 0]
     return alpha, beta
 
 
@@ -78,7 +78,6 @@ def run_through_method_right(a, b, c, d, x):
 def run_through_method_reverse(A, B, x, t):
 
     y = np.zeros(len(x))
-    gamma1, gamma2 = gamma_l(t), gamma_r(t)
 
     y[-1] = B[-1]
     for i in range(len(x) - 2, -1, -1):
@@ -129,14 +128,15 @@ def anim():
     left_border = 0
     right_border = 1
     t_min = 0
-    t_max = 2
+    t_max = 1
 
     n = 20
     x_arr = np.linspace(left_border, right_border, n + 1)
     h = (right_border - left_border) / n
-
+    print(h)
     a = 1
-    tau = 0.1 * h
+    tau = 0.01*h
+
     t_curr = tau * 2
     u = np.zeros((2, n + 1))
 
@@ -146,7 +146,7 @@ def anim():
     u[1] = function(u[0], tau, 0.5, 1, x_arr, h)
 
     fig = plt.figure()
-    ax = plt.axes(xlim=(left_border, right_border), ylim=(-3, 5))
+    ax = plt.axes(xlim=(left_border, right_border), ylim=(-3, 11))
     line1, = ax.plot([], [], lw=3)
 
     def init():
@@ -189,7 +189,7 @@ def animation():
 
 
 
-    u[0][i] = fi(x_arr)
+    u[0] = fi(x_arr)
     u[1] = function(u[0], tau, 0.5, 1, x_arr, h)
 
     fig = plt.figure()

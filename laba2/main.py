@@ -218,7 +218,7 @@ def animation():
         line2.set_data(x, y2)
         line1.set_color("green")
         line2.set_color("red")
-        return line1,
+        return line1, line2
 
     anim = FuncAnimation(fig, animate, init_func=init,
                          frames= int((t_max - t_min) // tau), interval=30, blit=True)

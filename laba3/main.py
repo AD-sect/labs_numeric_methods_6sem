@@ -154,7 +154,7 @@ def anim():
     x_arr = np.linspace(left_border, right_border, m + 1)
     h = (right_border - left_border) / m
 
-    tau = 0.5*h
+    tau = 0.01
 
     # t_curr = tau * 2
     u = np.zeros((2, m + 1))
@@ -187,11 +187,9 @@ def anim():
             for j in range(5):
                 u[1] = function(u[0], u[1], tau, i, x, h)
             y1 = u[1]
-            print(y1)
             for k in range(len(x)):
                 y2[k] = u_an(x[k], i * tau)
             print(i*tau)
-            # print(y2, "here")
 
         line1.set_data(x, y1)
         line2.set_data(x, y2)

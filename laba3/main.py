@@ -15,7 +15,7 @@ hi = 1
 
 
 def alpha():
-    return 1/(n)**2
+    return 1/(n**2)
 
 def f(x, t):
     if x == 0 and t != 0:
@@ -88,7 +88,6 @@ def run_through_method_right(a, b, c, d, x):
     B[0] = d[0] / b[0]
     for i in range(1, len(x)):
         A[i] = -c[i] / (b[i] + a[i]*A[i - 1])
-    for i in range(1, len(x)):
         B[i] = (d[i] - a[i]*B[i - 1]) / (b[i] + a[i]*A[i - 1])
 
     return A, B
@@ -156,7 +155,6 @@ def anim():
 
     tau = 0.01
 
-    # t_curr = tau * 2
     u = np.zeros((2, m + 1))
 
     u[0] = np.zeros(len(x_arr))
@@ -189,7 +187,7 @@ def anim():
             y1 = u[1]
             for k in range(len(x)):
                 y2[k] = u_an(x[k], i * tau)
-            print(i*tau)
+
 
         line1.set_data(x, y1)
         line2.set_data(x, y2)

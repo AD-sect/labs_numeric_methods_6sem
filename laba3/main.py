@@ -2,8 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-n = 13/2
-k = 0
+
+n = 1
+k = 1
 u0 = 1.25
 
 left_border = 0
@@ -14,7 +15,7 @@ hi = 1
 
 
 def alpha():
-    return 0.573740
+    return 1/(n)**2
 
 def f(x, t):
     if x == 0 and t != 0:
@@ -24,10 +25,7 @@ def f(x, t):
     else:
         z = x/(hi * u0**n * t**(k*n+1))**0.5
         if z <= alpha():
-            return 13/4 * alpha() * (alpha() - z) - 13/60 * (alpha() - z)**2 + 169/37800 * (alpha() - z)**3 / alpha() \
-               + 3211/46494000 * (alpha() - z)**4 / alpha()**2 - 42757/73228050000 * (alpha() - z)**5 / alpha()**3 - \
-                   36954047/441565141500000*(alpha() - z)**6 / alpha()**4
-
+            return alpha()*n*(alpha() - z)
 
 def u_an(x, t):
     if (x <= (alpha()*(hi * u0**n * t**(k*n+1))**0.5) ):
@@ -72,9 +70,9 @@ def function(prev, prev_iter,  tau, t, x, h):
 
 
     for i in range(1, len(x)-1):
-        a[i] = tau/2*h**2 * ( l(prev_iter[i]) + l(prev_iter[i - 1]))
-        b[i] = -tau/2*h**2 * (2*l(prev_iter[i]) + l(prev_iter[i - 1]) + l(prev_iter[i + 1])) - 1
-        c[i] = tau/2*h**2 * (l(prev_iter[i]) + l(prev_iter[i + 1]))
+        a[i] = tau/(2*h**2) * ( l(prev_iter[i]) + l(prev_iter[i - 1]))
+        b[i] = -tau/(2*h**2) * (2*l(prev_iter[i]) + l(prev_iter[i - 1]) + l(prev_iter[i + 1])) - 1
+        c[i] = tau/(2*h**2) * (l(prev_iter[i]) + l(prev_iter[i + 1]))
         d[i] = -prev[i]
 
     A, B = run_through_method_right(a, b, c, d, x)
@@ -101,11 +99,12 @@ def run_through_method_reverse(A, B, x):
 
     y[-1] = B[-1]
     for i in range(len(x) - 2, -1, -1):
-        y[i] = B[i] + A[i] * y[i + 1]
+        y[i] = B[i] + A[i] * y[i+1]
     return y
 
+
 def graphic():
-    m = 20
+    m = 60
     tau = 0.01
 
 
@@ -130,7 +129,7 @@ def graphic():
     next = prev_iter
 
     plt.subplot(1, 2, 1)
-    plt.title("Метод прогонки для уравнения теплопроводности при t = 2")
+    plt.title("Задача нелинейной теплопроводности при t = 2")
     plt.xlabel("x")
     plt.ylabel("u")
     plt.grid()
@@ -151,7 +150,7 @@ def graphic():
 def anim():
 
 
-    m = 20
+    m = 60
     x_arr = np.linspace(left_border, right_border, m + 1)
     h = (right_border - left_border) / m
 
@@ -167,7 +166,7 @@ def anim():
         u[1] = function(u[0], u[1], tau, 1, x_arr, h)
 
     fig = plt.figure()
-    ax = plt.axes(xlim=(left_border, right_border + 2), ylim=(-3, 3))
+    ax = plt.axes(xlim=(left_border, right_border), ylim=(-3, 3))
     line1, = ax.plot([], [], lw=3)
     line2, = ax.plot([], [], lw=3)
 
@@ -201,9 +200,9 @@ def anim():
         return line1, line2
 
     anim = FuncAnimation(fig, animate, init_func=init,
-                         frames= int((t_max - t_min) // tau), interval=30, blit=True)
+                         frames= int((t_max - t_min) // tau), interval=50, blit=True)
 
-    anim.save('dop.gif', writer='imagemagick')
+    anim.save('sol.gif', writer='imagemagick')
 
 def main():
     # graphic()

@@ -201,19 +201,7 @@ def anim():
     anim.save('sol.gif', writer='imagemagick')
 
 def main():
-    w = 3.4817
-    k = -( ((w**4) - 12.1*w**2) /(-0.2*w**2 + 1.2))
-    print(k)
-    print(8/(3*k))
-    n =  -( ((w**4) - 6.7*w**2) /(-0.6*w**2 + 1))
-    # print(((w**4) - 6.7*w**2) )
-    #
-    # m = (f(2) +f(1) + 3**(0.5)*f(3**(0.5)))
-    # c = f((3**(0.5)/2)*3)
-    # print(m)
-
-
-    # graphic()
+    graphic()
     # anim()
 def f(x):
     return (abs(x + 1) - abs(x-1))

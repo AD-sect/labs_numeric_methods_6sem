@@ -6,15 +6,17 @@ from matplotlib.animation import FuncAnimation
 left_border = 0
 right_border = 10
 t_min = 0
-t_max = 3
+t_max = 2
 a = 5
 C = 0.5
 
 
 def a(x):
-    return x
+    # return x
+    return 5*1/(x+1) - 0.7*x
 def f(x):
-    return (x**2)/2
+    # return (x**2)/2
+    return 5*np.log(x+1) - 0.7*x**2/2
 
 def gamma_r(x, t):
     return 0
@@ -24,7 +26,8 @@ def gamma_l(x, t):
 
 def fi(x):
     # return np.heaviside(x-1, 1)* np.heaviside(2-x, 1)
-    return np.heaviside(x, 1)* np.heaviside(2-x, 1)*np.sin(np.pi*x/2)**2
+    # return np.heaviside(x, 1)* np.heaviside(2-x, 1)*np.sin(np.pi*x/2)**2
+    return np.heaviside(4-x, 1) * np.cos(np.pi*x)**2
 
 def method(prev, x,  h, tau):
 
@@ -37,44 +40,9 @@ def method(prev, x,  h, tau):
     next[-1] = gamma_r(x, tau)
     return next
 
-# def graphic():
-#     m = 2000
-#     x = np.linspace(left_border, right_border, m)
-#     h = (right_border - left_border) / m
-#     tau = C * h/a
-#
-#     time = np.linspace(t_min, t_max, int((t_max - t_min) // tau))
-#
-#     prev = fi(x)
-#
-#
-#     for i in range(1, len(time)):
-#         print(i)
-#         next = method(prev, x, h, tau)
-#         prev = next
-#
-#
-#     plt.subplot(1, 2, 1)
-#     plt.title("Задача нелинейной теплопроводности при t = 2")
-#     plt.xlabel("x")
-#     plt.ylabel("u")
-#     plt.grid()
-#     plt.plot(x, next, color='r', label="Численное решение")
-#     plt.legend()
-#
-#     plt.subplot(1, 2, 2)
-#     plt.title("Задача нелинейной теплопроводности при t = 2")
-#     plt.xlabel("x")
-#     plt.ylabel("u")
-#     plt.grid()
-#     plt.plot(x, fi(x), color='r', label="Численное решение")
-#     plt.legend()
-#
-#     plt.show()
-
 def anim():
 
-    m = 1000
+    m = 200
     x_arr = np.linspace(left_border, right_border, m)
     h = (right_border - left_border) / m
 
@@ -112,8 +80,6 @@ def anim():
                          frames=int((t_max - t_min) // tau), interval=30, blit=True)
 
     # anim.save('sol_transferring_rectangular_profile.gif', writer='imagemagick')
-    anim.save('sol_transferring_with_discontinuous_solution.gif', writer='imagemagick')
-
-# graphic()
+    anim.save('sol_3_1.gif', writer='imagemagick')
 
 anim()
